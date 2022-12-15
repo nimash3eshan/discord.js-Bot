@@ -22,14 +22,28 @@ const rest = new REST({version:'10'}).setToken(TOKEN)
 client.on('ready', () => {console.log(`Logged in as ${client.user.tag}!`)});
 client.on('messageCreate', message => {console.log(message.content)});
 
+client.on('interactionCreate', interaction => {
+  if(interaction.isChatInputCommand()) {
+    interaction.reply(`your ${interaction.options.getString('food')} order is preparing`);
+  }
+});
+
 async function main() {
 
   const commands = [
     {
-      name: 'nes',
-      description: 'you will be great ai developer',
+      name: 'order',
+      description: 'order something',
+      options: [
+        {
+          name: 'food',
+          description: 'The type of food you want to order',
+          type: 3,
+          required: true
+        }
+      ]
     },
-  ];
+  ]; 
 
   try{
     console.log('Started refreshing application (/) commands.');
