@@ -1,8 +1,11 @@
 import { Client, GatewayIntentBits, Routes } from "discord.js";
 import { config } from "dotenv";
 import { REST } from "@discordjs/rest";
-import { SlashCommandBuilder } from 'discord.js';
 
+import orderCommand from "./commands/order.js";
+import rolesCommand from './commands/roles.js';
+import userCommand from './commands/user.js';
+import channelCommand from "./commands/channel.js";
 
 config();
 
@@ -39,53 +42,7 @@ client.on("interactionCreate", (interaction) => {
 
 async function main() { 
 
-  const orderCommand = new SlashCommandBuilder()
-    .setName("order")
-    .setDescription("order something")
-    .addStringOption((option) =>
-      option
-        .setName("food")
-        .setDescription("The type of food you want to order")
-        .setRequired(true)
-        .setChoices(
-          {
-            name: "pizza",
-            value: "pizza"
-          },
-          {
-            name: "burger",
-            value: "burger"
-          },
-          {
-            name: "pasta",
-            value: "pasta"
-          }
-        )
-
-    )
-    .addStringOption((option) =>
-      option
-        .setName("drink")
-        .setDescription("The type of drink you want to order")  
-        .setRequired(false)
-        .setChoices(
-          {
-            name: "coke",
-            value: "coke"
-          },
-          {
-            name: "fanta",
-            value: "fanta"
-          },
-          {
-            name: "sprite",
-            value: "sprite"
-          }
-        )
-
-    );
-
-    const commands = [orderCommand.toJSON()];
+    const commands = [orderCommand, rolesCommand, userCommand, channelCommand];
 
   try {
     console.log("Started refreshing application (/) commands.");
