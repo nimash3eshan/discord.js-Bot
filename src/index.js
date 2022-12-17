@@ -32,13 +32,50 @@ client.on("messageCreate", (message) => {
 });
 
 client.on("interactionCreate", (interaction) => {
-  if (interaction.isChatInputCommand()) {
+  // if (interaction.isChatInputCommand()) {
+  //   const food = interaction.options.get("food").value;
+  //   const drink = interaction.options.get("drink").value;
+  //   interaction.reply(
+  //     `your ${food} order & ${drink} order is preparing`
+  //   );
+  // }
+
+  if(interaction.commandName === "order") {
     const food = interaction.options.get("food").value;
     const drink = interaction.options.get("drink").value;
     interaction.reply(
       `your ${food} order & ${drink} order is preparing`
     );
   }
+
+  if(interaction.commandName === "addrole") {
+    const role = interaction.options.get("role").value;
+    interaction.reply(
+      `your role is ${role}`
+    );
+  }
+
+  if(interaction.commandName === "adduser") {
+    const user = interaction.options.get("user").value;
+    interaction.reply(
+      `your user is ${user}`
+    );
+  }
+
+  if(interaction.commandName === "addchannel") {
+    const channel = interaction.options.get("channel").value;
+    interaction.reply(
+      `your channel is ${channel}`
+    );
+  }
+
+  if(interaction.commandName === "ban") {
+    const user = interaction.options.get("user").value;
+    interaction.reply(
+      `you banned the ${user}`
+    );
+  }
+
 });
 
 async function main() { 
