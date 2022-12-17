@@ -3,10 +3,13 @@ import { config } from "dotenv";
 import { REST } from "@discordjs/rest";
 
 import orderCommand from "./commands/order.js";
-import rolesCommand from './commands/roles.js';
-import userCommand from './commands/user.js';
+import rolesCommand from "./commands/roles.js";
+import userCommand from "./commands/user.js";
 import channelCommand from "./commands/channel.js";
-import banCommand from './commands/ban.js'
+import banCommand from "./commands/ban.js";
+import selOrderCommand from "./commands/selOrder.js";
+
+import { ActionRowBuilder, StringSelectMenuBuilder } from "discord.js";
 
 config();
 
@@ -31,7 +34,7 @@ client.on("messageCreate", (message) => {
   console.log(message.content);
 });
 
-client.on("interactionCreate", (interaction) => {
+client.on("interactionCreate", async (interaction) => {
   // if (interaction.isChatInputCommand()) {
   //   const food = interaction.options.get("food").value;
   //   const drink = interaction.options.get("drink").value;
@@ -40,52 +43,76 @@ client.on("interactionCreate", (interaction) => {
   //   );
   // }
 
-  if(interaction.commandName === "order") {
+  if (interaction.commandName === "order") {
     const food = interaction.options.get("food").value;
     const drink = interaction.options.get("drink").value;
-    interaction.reply(
-      `your ${food} order & ${drink} order is preparing`
-    );
+    await interaction.reply(`your ${food} order & ${drink} order is preparing`);
   }
 
-  if(interaction.commandName === "addrole") {
+  if (interaction.commandName === "addrole") {
     const role = interaction.options.get("role").value;
-    interaction.reply(
-      `your role is ${role}`
-    );
+    await interaction.reply(`your role is ${role}`);
   }
 
-  if(interaction.commandName === "adduser") {
+  if (interaction.commandName === "adduser") {
     const user = interaction.options.get("user").value;
-    interaction.reply(
-      `your user is ${user}`
-    );
+    await interaction.reply(`your user is ${user}`);
   }
 
-  if(interaction.commandName === "addchannel") {
+  if (interaction.commandName === "addchannel") {
     const channel = interaction.options.get("channel").value;
-    interaction.reply(
-      `your channel is ${channel}`
-    );
+    await interaction.reply(`your channel is ${channel}`);
   }
 
-  if(interaction.commandName === "ban") {
+  if (interaction.commandName === "ban") {
     const user = interaction.options.get("user").value;
-    interaction.reply(
-      `you banned the ${user}`
-    );
+    await interaction.reply(`you banned the ${user}`);
   }
 
+  if (interaction.commandName === "select") {
+    // console.log(interaction);
+    const row = new ActionRowBuilder().addComponents(
+      new StringSelectMenuBuilder()
+        .setCustomId("select")
+        .setPlaceholder("Nothing selected")
+        .addOptions([
+          {
+            label: "Pizza",
+            description: "Pizza is delicious",
+            value: "pizza",
+            emoji: "🍕",
+          },
+          {
+            label: "Burger",
+            description: "Burger is delicious",
+            value: "burger",
+            emoji: "🍔",
+          },
+          {
+            label: "Pasta",
+            description: "Pasta is delicious",
+            value: "pasta",
+            emoji: "🍝",
+          },
+        ])
+    );
+
+    await interaction.reply({
+      content: "Select your favorite food",
+      components: [row],
+    });
+  }
 });
 
-async function main() { 
-
-    const commands = [
-      orderCommand, 
-      rolesCommand, 
-      userCommand, 
-      channelCommand, 
-      banCommand];
+async function main() {
+  const commands = [
+    orderCommand,
+    rolesCommand,
+    userCommand,
+    channelCommand,
+    banCommand,
+    selOrderCommand,
+  ];
 
   try {
     console.log("Started refreshing application (/) commands.");
