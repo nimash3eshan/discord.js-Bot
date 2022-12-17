@@ -6,6 +6,7 @@ import orderCommand from "./commands/order.js";
 import rolesCommand from './commands/roles.js';
 import userCommand from './commands/user.js';
 import channelCommand from "./commands/channel.js";
+import banCommand from './commands/ban.js'
 
 config();
 
@@ -42,7 +43,12 @@ client.on("interactionCreate", (interaction) => {
 
 async function main() { 
 
-    const commands = [orderCommand, rolesCommand, userCommand, channelCommand];
+    const commands = [
+      orderCommand, 
+      rolesCommand, 
+      userCommand, 
+      channelCommand, 
+      banCommand];
 
   try {
     console.log("Started refreshing application (/) commands.");
