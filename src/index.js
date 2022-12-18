@@ -1,4 +1,14 @@
-import { Client, GatewayIntentBits, Routes } from "discord.js";
+import {
+  Client,
+  GatewayIntentBits,
+  ModalBuilder,
+  Routes,
+  TextInputBuilder,
+  TextInputStyle,
+  ActionRowBuilder,
+  StringSelectMenuBuilder,
+} from "discord.js";
+
 import { config } from "dotenv";
 import { REST } from "@discordjs/rest";
 
@@ -8,8 +18,7 @@ import userCommand from "./commands/user.js";
 import channelCommand from "./commands/channel.js";
 import banCommand from "./commands/ban.js";
 import selOrderCommand from "./commands/selOrder.js";
-
-import { ActionRowBuilder, StringSelectMenuBuilder } from "discord.js";
+import registerCommand from "./commands/register.js";
 
 config();
 
@@ -120,7 +129,7 @@ client.on("interactionCreate", async (interaction) => {
               description: "Coffee is delicious",
               value: "coffee",
               emoji: "☕",
-            }
+            },
           ])
       );
 
@@ -129,14 +138,42 @@ client.on("interactionCreate", async (interaction) => {
         components: [row1, row2],
       });
     }
-  } 
-  else if (interaction.isStringSelectMenu()) {
 
-    if(interaction.customId === "se1") {
-      await interaction.reply(`you selected ${interaction.values[0]} for your food`);
+    if (interaction.commandName === "register") {
+      const modal = new ModalBuilder()
+        .setTitle("Register")
+        .setCustomId("reg")
+        .addComponents(
+          new ActionRowBuilder().addComponents(
+            new TextInputBuilder()
+              .setCustomId("name")
+              .setLabel("Name")
+              .setStyle(TextInputStyle.Short)
+              .setPlaceholder("Enter your name")
+          ),
+          new ActionRowBuilder().addComponents(
+            new TextInputBuilder()
+              .setCustomId("email")
+              .setLabel("Email")
+              .setStyle(TextInputStyle.Short)
+              .setPlaceholder("Enter your email")
+          )
+          
+        );
+
+      await interaction.showModal(modal);
+
     }
-    if(interaction.customId === "se2") {
-      await interaction.reply(`you selected ${interaction.values[0]} for your drink`);
+  } else if (interaction.isStringSelectMenu()) {
+    if (interaction.customId === "se1") {
+      await interaction.reply(
+        `you selected ${interaction.values[0]} for your food`
+      );
+    }
+    if (interaction.customId === "se2") {
+      await interaction.reply(
+        `you selected ${interaction.values[0]} for your drink`
+      );
     }
   }
 });
@@ -149,6 +186,7 @@ async function main() {
     channelCommand,
     banCommand,
     selOrderCommand,
+    registerCommand,
   ];
 
   try {
