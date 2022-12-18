@@ -22,6 +22,7 @@ import banCommand from "./commands/ban.js";
 import selOrderCommand from "./commands/selOrder.js";
 import registerCommand from "./commands/register.js";
 import buttonCommand from "./commands/button.js";
+import channel from "./commands/channel.js";
 
 config();
 
@@ -40,17 +41,20 @@ const GUILD_ID = process.env.GUILD_ID;
 const rest = new REST({ version: "10" }).setToken(TOKEN);
 
 client.on("ready", () => {
+
   console.log(`Logged in as ${client.user.tag}!`);
+  // client.channels.cache.get("1040982597506977792").send(`Logged in as ${client.user.tag}!`);
+
 });
+
 client.on("messageCreate", (message) => {
+
   if(message.author.bot) return;
-  if(interaction.isButton()) {
-    console.log(interaction.customId);
-  }
 
   if(message.content === "hello") {
     message.reply("hello");
   }
+  
 });
 
 client.on("interactionCreate", async (interaction) => {
@@ -196,7 +200,7 @@ client.on("interactionCreate", async (interaction) => {
         new ButtonBuilder()
           .setLabel("Click me link")
           .setStyle(ButtonStyle.Link)
-          .setURL("https://nimasheshan.tk")
+          .setURL("https://youtu.be/xvFZjo5PgG0")
 
       );
 
@@ -218,14 +222,26 @@ client.on("interactionCreate", async (interaction) => {
       );
     }
   }
-  else if (!interaction.isModalSubmit()) return;
+
   else if (interaction.customId === "reg") {
     const name = interaction.fields.getTextInputValue("name");
     const email = interaction.fields.getTextInputValue("email");
     await interaction.reply({content: `your name is ${name} and email is ${email}`, ephemeral: true });
   }
-  else if (interaction.customId === "btn") {
-    await interaction.reply({content: "you clicked success button", ephemeral: true });
+
+  else if (interaction.isButton()) {
+    if (interaction.customId === "btn1") {
+      await interaction.reply({content: "success button clicked", ephemeral: true });
+    }
+    else if (interaction.customId === "btn2") {
+      await interaction.reply({content: "primary button clicked", ephemeral: true });
+    }
+    else if (interaction.customId === "btn3") {
+      await interaction.reply({content: "danger button clicked", ephemeral: true });
+    }
+    else if (interaction.customId === "btn4") {
+      await interaction.reply({content: "secondary button clicked", ephemeral: true });
+    }
   }
   
 });
