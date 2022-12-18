@@ -43,11 +43,12 @@ client.on("interactionCreate", async (interaction) => {
   //   );
   // }
   if (interaction.isChatInputCommand()) {
-
     if (interaction.commandName === "order") {
       const food = interaction.options.get("food").value;
       const drink = interaction.options.get("drink").value;
-      await interaction.reply(`your ${food} order & ${drink} order is preparing`);
+      await interaction.reply(
+        `your ${food} order & ${drink} order is preparing`
+      );
     }
 
     if (interaction.commandName === "addrole") {
@@ -72,10 +73,10 @@ client.on("interactionCreate", async (interaction) => {
 
     if (interaction.commandName === "select") {
       // console.log(interaction);
-      const row = new ActionRowBuilder().addComponents(
+      const row1 = new ActionRowBuilder().addComponents(
         new StringSelectMenuBuilder()
-          .setCustomId("select")
-          .setPlaceholder("Nothing selected")
+          .setCustomId("se1")
+          .setPlaceholder("select your favourite food")
           .addOptions([
             {
               label: "Pizza",
@@ -97,12 +98,40 @@ client.on("interactionCreate", async (interaction) => {
             },
           ])
       );
+      const row2 = new ActionRowBuilder().addComponents(
+        new StringSelectMenuBuilder()
+          .setCustomId("se2")
+          .setPlaceholder("select your favourite drink")
+          .addOptions([
+            {
+              label: "Coke",
+              description: "Coke is delicious",
+              value: "coke",
+              emoji: "🥤",
+            },
+            {
+              label: "Tea",
+              description: "Tea is delicious",
+              value: "tea",
+              emoji: "🍵",
+            },
+            {
+              label: "Coffee",
+              description: "Coffee is delicious",
+              value: "coffee",
+              emoji: "☕",
+            }
+          ])
+      );
 
       await interaction.reply({
         content: "Select your favorite food",
-        components: [row],
+        components: [row1, row2],
       });
     }
+  } 
+  else if (interaction.isStringSelectMenu()) {
+    await interaction.reply(`you selected ${interaction.values[0]}`);
   }
 });
 
