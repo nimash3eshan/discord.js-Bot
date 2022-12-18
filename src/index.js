@@ -170,12 +170,19 @@ client.on("interactionCreate", async (interaction) => {
         `you selected ${interaction.values[0]} for your food`
       );
     }
-    if (interaction.customId === "se2") {
+    else if (interaction.customId === "se2") {
       await interaction.reply(
         `you selected ${interaction.values[0]} for your drink`
       );
     }
   }
+  else if (!interaction.isModalSubmit()) return;
+  else if (interaction.customId === "reg") {
+    const name = interaction.fields.getTextInputValue("name");
+    const email = interaction.fields.getTextInputValue("email");
+    await interaction.reply({content: `your name is ${name} and email is ${email}`, ephemeral: true });
+  }
+  
 });
 
 async function main() {
