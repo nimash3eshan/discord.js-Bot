@@ -131,7 +131,13 @@ client.on("interactionCreate", async (interaction) => {
     }
   } 
   else if (interaction.isStringSelectMenu()) {
-    await interaction.reply(`you selected ${interaction.values[0]}`);
+
+    if(interaction.customId === "se1") {
+      await interaction.reply(`you selected ${interaction.values[0]} for your food`);
+    }
+    if(interaction.customId === "se2") {
+      await interaction.reply(`you selected ${interaction.values[0]} for your drink`);
+    }
   }
 });
 
