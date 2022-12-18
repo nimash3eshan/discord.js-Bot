@@ -7,6 +7,8 @@ import {
   TextInputStyle,
   ActionRowBuilder,
   StringSelectMenuBuilder,
+  ButtonBuilder,
+  ButtonStyle
 } from "discord.js";
 
 import { config } from "dotenv";
@@ -19,6 +21,7 @@ import channelCommand from "./commands/channel.js";
 import banCommand from "./commands/ban.js";
 import selOrderCommand from "./commands/selOrder.js";
 import registerCommand from "./commands/register.js";
+import buttonCommand from "./commands/button.js";
 
 config();
 
@@ -40,7 +43,14 @@ client.on("ready", () => {
   console.log(`Logged in as ${client.user.tag}!`);
 });
 client.on("messageCreate", (message) => {
-  console.log(message.content);
+  if(message.author.bot) return;
+  if(interaction.isButton()) {
+    console.log(interaction.customId);
+  }
+
+  if(message.content === "hello") {
+    message.reply("hello");
+  }
 });
 
 client.on("interactionCreate", async (interaction) => {
@@ -164,7 +174,39 @@ client.on("interactionCreate", async (interaction) => {
       await interaction.showModal(modal);
 
     }
-  } else if (interaction.isStringSelectMenu()) {
+
+    if (interaction.commandName === "btn") {
+      const button = new ActionRowBuilder().addComponents(
+        new ButtonBuilder()
+          .setCustomId("btn1")
+          .setLabel("Click me success")
+          .setStyle(ButtonStyle.Success),
+        new ButtonBuilder()
+          .setCustomId("btn2")
+          .setLabel("Click me primary")
+          .setStyle(ButtonStyle.Primary),
+        new ButtonBuilder()
+          .setCustomId("btn3")
+          .setLabel("Click me danger")
+          .setStyle(ButtonStyle.Danger),
+        new ButtonBuilder()
+          .setCustomId("btn4")
+          .setLabel("Click me secondary")
+          .setStyle(ButtonStyle.Secondary),
+        new ButtonBuilder()
+          .setLabel("Click me link")
+          .setStyle(ButtonStyle.Link)
+          .setURL("https://nimasheshan.tk")
+
+      );
+
+      await interaction.reply({
+        content: "Click the button",
+        components: [button],
+      });
+    }
+  } 
+  else if (interaction.isStringSelectMenu()) {
     if (interaction.customId === "se1") {
       await interaction.reply(
         `you selected ${interaction.values[0]} for your food`
@@ -182,6 +224,9 @@ client.on("interactionCreate", async (interaction) => {
     const email = interaction.fields.getTextInputValue("email");
     await interaction.reply({content: `your name is ${name} and email is ${email}`, ephemeral: true });
   }
+  else if (interaction.customId === "btn") {
+    await interaction.reply({content: "you clicked success button", ephemeral: true });
+  }
   
 });
 
@@ -194,6 +239,7 @@ async function main() {
     banCommand,
     selOrderCommand,
     registerCommand,
+    buttonCommand
   ];
 
   try {
